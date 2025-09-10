@@ -78,6 +78,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     
     // Haptic feedback
     HapticFeedback.heavyImpact();
+    
+    // Debug print to check task count
+    print('Tasks after deletion: ${_tasks.length}');
+    print('Completed tasks: ${_completedTasks}');
   }
 
   void _showAddTaskDialog() {
@@ -196,11 +200,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   child: _tasks.isEmpty
                       ? _buildEmptyState()
                       : ListView.builder(
+                          key: ValueKey(_tasks.length), // Force rebuild when task count changes
                           padding: AppSizes.paddingAll20,
                           itemCount: _tasks.length,
                           itemBuilder: (context, index) {
                             final task = _tasks[index];
                             return TaskItem(
+                              key: ValueKey(task.id), // Unique key for each task
                               task: task,
                               onToggle: () => _toggleTask(task.id),
                               onDelete: () => _deleteTask(task.id),

@@ -61,12 +61,19 @@ class _TaskItemState extends State<TaskItem>
   }
 
   void _handleDelete() async {
+    if (_isDeleting) return; // Prevent multiple deletions
+    
     setState(() {
       _isDeleting = true;
     });
     
+    // Start the reverse animation
     await _animationController.reverse();
-    widget.onDelete();
+    
+    // Call the delete callback after animation completes
+    if (mounted) {
+      widget.onDelete();
+    }
   }
 
   @override
